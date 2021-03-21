@@ -22,7 +22,7 @@ exports.handler = async (event, context) => {
   let message = "# Success";
   try {
 
-    let cid = new CID(value)
+    let cid = new CID(event)
     message = cid.toV1().toBaseEncodedString('base32')
 
     // can't use ipfs-core with aws lamdba because:   (also it is SUCH A BIG LIBRARY that it pushes over upload limit)
