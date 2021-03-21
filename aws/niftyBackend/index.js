@@ -11,6 +11,7 @@ const {
 
 const Web3 = require('web3');
 const pinataSDK = require('@pinata/sdk');
+const IPFS = require('ipfs-core');
 const { RaribleSDK } = require("rarible-sdk");
 const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
@@ -27,21 +28,16 @@ exports.handler = async (event, context) => {
   let message = "# Success";
   try {
 
-    const web3 = getWeb3();
-    const pinata = pinataSDK(PINATA_KEY, PINATA_SECRET);
-
-
-    pinata.testAuthentication().then((result) => {
-      //handle successful authentication here
-      console.log(result);
-    }).catch((err) => {
-      //handle error here
-      console.log(err);
-    });
+    // get ipfs image
+    const cid = '/ipfs/QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
+    let imageData = getImageData(cid);
 
 
 
-    let items = [];
+    // const web3 = getWeb3();
+    // const pinata = pinataSDK(PINATA_KEY, PINATA_SECRET);
+
+    // let items = [];
     // const raribleSDK = new RaribleSDK('mainnet'); // THIS CURRENTLY ONLY WORKS WITH MAINNET
     // const raribleItems = await raribleSDK.getItems();
     // await slackMessageLogger.log('handler', raribleItems);
@@ -52,13 +48,28 @@ exports.handler = async (event, context) => {
     //   return item;
     // }));
 
-    return items;
+    return imageData;
   } catch(error) {
     message = error.message;
     await slackErrorLogger.logError('handler', `${AWS_LAMBDA_FUNCTION_NAME} failed.`, error);
   }
   console.log(`Completed ${AWS_LAMBDA_FUNCTION_NAME}`);
   return { statusCode: 200, body: message };
+
+
+  /**
+   * Get Image Data
+   * @param {string} cid
+   * @returns {Promise<Buffer>}
+   */
+  async function getImageData(cid) {
+    const node = await IPFS.create();
+    let bufs = [];
+    for await (const buf of node.cat(cid)) {
+      bufs.push(buf);
+    }
+    return Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
+  }
 };
 
 /**
@@ -100,3 +111,4 @@ function getWeb3() {
       )
   );
 }
+
