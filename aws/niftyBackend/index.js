@@ -5,9 +5,12 @@ const {
   SLACK_MESSAGE_LOG,
   INFURA_ENDPOINT,
   INFURA_SECRET,
+  PINATA_KEY,
+  PINATA_SECRET
 } = process.env;
 
 const Web3 = require('web3');
+const pinataSDK = require('@pinata/sdk');
 const { RaribleSDK } = require("rarible-sdk");
 const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
@@ -25,6 +28,17 @@ exports.handler = async (event, context) => {
   try {
 
     const web3 = getWeb3();
+    const pinata = pinataSDK(PINATA_KEY, PINATA_SECRET);
+
+
+    pinata.testAuthentication().then((result) => {
+      //handle successful authentication here
+      console.log(result);
+    }).catch((err) => {
+      //handle error here
+      console.log(err);
+    });
+
 
 
     let items = [];
