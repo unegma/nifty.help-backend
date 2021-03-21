@@ -23,6 +23,6 @@
     "aws-sdk": "^2.780.0",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.1",
-    "rarible-sdk": "^1.9.7"
+    "rarible-sdk": "^1.9.9"
   }
 }

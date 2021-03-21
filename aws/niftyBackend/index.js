@@ -5,7 +5,7 @@ const {
   SLACK_MESSAGE_LOG
 } = process.env;
 
-// const { RaribleSDK } = require("rarible-sdk");
+const { RaribleSDK } = require("rarible-sdk");
 const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
 const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
@@ -20,13 +20,18 @@ exports.handler = async (event, context) => {
   console.log(`# Beginning ${AWS_LAMBDA_FUNCTION_NAME}`); console.log(JSON.stringify(event)); console.log(context);
   let message = "# Success";
   try {
+    let items = [];
     // const raribleSDK = new RaribleSDK('mainnet'); // THIS CURRENTLY ONLY WORKS WITH MAINNET
     // const raribleItems = await raribleSDK.getItems();
-    const raribleItems = {};
+    // await slackMessageLogger.log('handler', raribleItems);
+    // const test = await raribleSDK.getItemMeta('0x0000000000001b84b1cb32787b0d64758d019317:0x0000000000e000836a9560dceec305013898474d009d50ea8d0d3a260d060000');
+    // const raribleItemsWithMeta = await Promise.all(raribleItems.map(async (item) => {
+    //   let itemMeta = await raribleSDK.getItemMeta(item.id);
+    //   item.meta = itemMeta;
+    //   return item;
+    // }));
 
-    await slackMessageLogger.log('handler', raribleItems);
-
-    return raribleItems;
+    return items;
   } catch(error) {
     message = error.message;
     await slackErrorLogger.logError('handler', `${AWS_LAMBDA_FUNCTION_NAME} failed.`, error);
