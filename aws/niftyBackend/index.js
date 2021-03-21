@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
   try {
 
     let exampleCID = 'QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
-    let imageData = await awsUtilities.invokeLambda("Nifty_Help_getImage", exampleCID, true);
+    let message = await awsUtilities.invokeLambda("Nifty_Help_getImage", exampleCID, true);
 
 
     //
@@ -54,7 +54,6 @@ exports.handler = async (event, context) => {
     //   return item;
     // }));
 
-    return imageData;
   } catch(error) {
     message = error.message;
     await slackErrorLogger.logError('handler', `${AWS_LAMBDA_FUNCTION_NAME} failed.`, error);
