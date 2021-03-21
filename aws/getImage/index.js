@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
     for await (const buf of node.cat(event)) {
       bufs.push(buf);
     }
-    return Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
+    message = Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
 
   } catch(error) {
     message = error.message;
