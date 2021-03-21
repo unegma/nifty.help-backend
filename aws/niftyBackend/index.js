@@ -34,8 +34,8 @@ exports.handler = async (event, context) => {
     console.log('here');
 
     let exampleCID = 'QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
-    message = await awsUtilities.invokeLambda("Nifty_Help_getImage", exampleCID, 'RequestResponse');
-    message = JSON.parse(message);
+    message = await awsUtilities.invokeLambda("Nifty_Help_getImage", exampleCID, true);
+    message = JSON.stringify(message);
 
     console.log(`The message: ${message}`);
 

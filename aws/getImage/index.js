@@ -25,6 +25,8 @@ exports.handler = async (event, context) => {
     let cid = new CID(event)
     message = cid.toV1().toBaseEncodedString('base32')
 
+    console.log(`The message: ${message}`);
+
     // can't use ipfs-core with aws lamdba because:   (also it is SUCH A BIG LIBRARY that it pushes over upload limit)
     // read-only file system, mkdir '/home/sbx_user1051' Error
     // const node = await IPFS.create();
