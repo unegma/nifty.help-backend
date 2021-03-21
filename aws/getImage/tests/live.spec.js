@@ -7,7 +7,7 @@ const expect = chai.expect;
 const FUNCTION_NAME = "niftyBackend";
 require('dotenv').config({ path: '../../.env' }); // todo this will be different when moving directory
 
-describe('HandleNiftyBackend', () => {
+describe('HandleNiftyBackendgetImage', () => {
     let event = require('./testData/testData.json');
     let awsStub;
     let arIncludes;
@@ -41,7 +41,7 @@ describe('HandleNiftyBackend', () => {
         // need to use function() in order to use this.timeout https://mochajs.org/#arrow-functions
         // only need this for developing using tests, don't need for when stubbing
         this.timeout(400000);
-        event.body = JSON.stringify(event.body);
+        event = 'QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
         return LambdaTester(handler)
             .event(event)
             .expectResult((result) => {
