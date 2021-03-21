@@ -1,13 +1,13 @@
 {
   "name": "nifty.help-backend-lambda",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/index.spec.js",
     "install-deps": "npm install;",
     "update-install": "npm update; npm install;",
-    "pub-aws": "bash ../../scripts/publish.sh -f niftyBackend",
-    "live-test": "aws --profile unegma lambda invoke --function-name 'niftyBackend' --invocation-type RequestResponse --region eu-west-2 --log-type Tail --cli-binary-format raw-in-base64-out --payload file://tests/testData/notconfigued.json response.json"
+    "pub-aws": "bash ../../scripts/publish.sh -f Nifty_Help_Backend",
+    "live-test": "aws --profile unegma lambda invoke --function-name 'Nifty_Help_Backend' --invocation-type RequestResponse --region eu-west-2 --log-type Tail --cli-binary-format raw-in-base64-out --payload file://tests/testData/notconfigued.json response.json"
   },
   "devDependencies": {
     "chai": "^4.2.0",

@@ -8,9 +8,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install-all-deps": "bash ./scripts/install-all.sh",
-    "update-install-all": "bash ./scripts/update-install-all.sh",
-    "publish-all": "bash ./scripts/publish-all.sh"
   },
   "repository": {
     "type": "git",
