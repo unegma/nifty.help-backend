@@ -1,4 +1,5 @@
 const {
+  AWS_REGION,
   AWS_LAMBDA_FUNCTION_NAME = 'Nifty_Help_Backend',
   // AWS_TIMEOUT_THRESHOLD
   SLACK_ERROR_LOG, // NEED ENVIRONMENT VARIABLES FOR THOSE USED IN IMPORTS
@@ -9,13 +10,14 @@ const {
   PINATA_SECRET
 } = process.env;
 
+const { AWSUtilities } = require('@unegma/aws-utilities');
+const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const Web3 = require('web3');
 const pinataSDK = require('@pinata/sdk');
-const IPFS = require('ipfs-core');
 const { RaribleSDK } = require("rarible-sdk");
-const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
 const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
+const awsUtilities = new AWSUtilities(AWS_REGION, SLACK_ERROR_LOG);
 
 /**
  *
@@ -25,12 +27,16 @@ const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
  */
 exports.handler = async (event, context) => {
   console.log(`# Beginning ${AWS_LAMBDA_FUNCTION_NAME}`); console.log(JSON.stringify(event)); console.log(context);
+
   let message = "# Success";
   try {
 
-    // get ipfs image
-    const cid = '/ipfs/QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
-    let imageData = getImageData(cid);
+    let exampleCID = 'QmeZNgksPj9oWVysFakn3dUZ8ij4VRXd2ZQWnvgmm6p2Az';
+    let imageData = await awsUtilities.invokeLambda("Nifty_Help_getImage", exampleCID, true);
+
+
+    //
+
 
 
 
@@ -55,21 +61,6 @@ exports.handler = async (event, context) => {
   }
   console.log(`Completed ${AWS_LAMBDA_FUNCTION_NAME}`);
   return { statusCode: 200, body: message };
-
-
-  /**
-   * Get Image Data
-   * @param {string} cid
-   * @returns {Promise<Buffer>}
-   */
-  async function getImageData(cid) {
-    const node = await IPFS.create();
-    let bufs = [];
-    for await (const buf of node.cat(cid)) {
-      bufs.push(buf);
-    }
-    return Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
-  }
 };
 
 /**
