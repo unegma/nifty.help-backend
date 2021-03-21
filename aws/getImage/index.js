@@ -14,7 +14,7 @@ const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
  *
  * @param event
  * @param context
- * @returns {Promise<{body: string, statusCode: number}>}
+ * @returns {Promise<{body: (*|string), statusCode: number}|Buffer>}
  */
 exports.handler = async (event, context) => {
   console.log(`# Beginning ${AWS_LAMBDA_FUNCTION_NAME}`); console.log(JSON.stringify(event)); console.log(context);
@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
 
     const node = await IPFS.create();
     let bufs = [];
-    for await (const buf of node.cat(cid)) {
+    for await (const buf of node.cat(event)) {
       bufs.push(buf);
     }
     return Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
