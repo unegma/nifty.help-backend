@@ -2,11 +2,13 @@ const {
   AWS_LAMBDA_FUNCTION_NAME = 'Nifty_Help_Backend',
   // AWS_TIMEOUT_THRESHOLD
   SLACK_ERROR_LOG, // NEED ENVIRONMENT VARIABLES FOR THOSE USED IN IMPORTS
+  SLACK_MESSAGE_LOG
 } = process.env;
 
 const { RaribleSDK } = require("rarible-sdk");
-const { SlackErrorLogger } = require('@unegma/logger');
+const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
+const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
 
 /**
  *
@@ -20,6 +22,8 @@ exports.handler = async (event, context) => {
   try {
     const raribleSDK = new RaribleSDK('mainnet'); // THIS CURRENTLY ONLY WORKS WITH MAINNET
     const raribleItems = await raribleSDK.getItems();
+
+    await slackMessageLogger.log('handler', raribleItems);
 
     return raribleItems;
   } catch(error) {
