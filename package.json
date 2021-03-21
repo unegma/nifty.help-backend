@@ -1,0 +1,22 @@
+{
+  "name": "nifty.help-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all-deps": "bash ./scripts/install-all.sh",
+    "update-install-all": "bash ./scripts/update-install-all.sh",
+    "publish-all": "bash ./scripts/publish-all.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/unegma/nifty.help-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/unegma/nifty.help-backend#readme"
+}

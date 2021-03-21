@@ -1,0 +1,8 @@
+.idea/
+.DS_Store
+node_modules/
+node_modules--temp/
+function.zip
+.env
+dist/
+response.json
