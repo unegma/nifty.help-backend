@@ -2,9 +2,12 @@ const {
   AWS_LAMBDA_FUNCTION_NAME = 'Nifty_Help_Backend',
   // AWS_TIMEOUT_THRESHOLD
   SLACK_ERROR_LOG, // NEED ENVIRONMENT VARIABLES FOR THOSE USED IN IMPORTS
-  SLACK_MESSAGE_LOG
+  SLACK_MESSAGE_LOG,
+  INFURA_ENDPOINT,
+  INFURA_SECRET,
 } = process.env;
 
+const Web3 = require('web3');
 const { RaribleSDK } = require("rarible-sdk");
 const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
@@ -20,6 +23,10 @@ exports.handler = async (event, context) => {
   console.log(`# Beginning ${AWS_LAMBDA_FUNCTION_NAME}`); console.log(JSON.stringify(event)); console.log(context);
   let message = "# Success";
   try {
+
+    const web3 = getWeb3();
+
+
     let items = [];
     // const raribleSDK = new RaribleSDK('mainnet'); // THIS CURRENTLY ONLY WORKS WITH MAINNET
     // const raribleItems = await raribleSDK.getItems();
@@ -51,3 +58,31 @@ exports.handler = async (event, context) => {
 /**
  * Low level functions (todo move to library?)
  */
+function getWeb3() {
+  return new Web3(
+      new Web3.providers.WebsocketProvider(
+          `${INFURA_ENDPOINT}${INFURA_SECRET}`,
+          {
+            timeout: 30000, // ms
+
+            clientConfig: {
+              // Useful if requests are large
+              maxReceivedFrameSize: 100000000, // bytes - default: 1MiB
+              maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
+
+              // Useful to keep a connection alive
+              keepalive: true,
+              keepaliveInterval: 60000, // ms
+            },
+
+            // Enable auto reconnection
+            reconnect: {
+              auto: true,
+              delay: 5000, // ms
+              maxAttempts: 5,
+              onTimeout: false,
+            },
+          }
+      )
+  );
+}
