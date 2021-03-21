@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const chai = require('chai');
 const expect = chai.expect;
 const FUNCTION_NAME = "niftyBackend";
-require('dotenv').config({ path: '../../../.env' }); // todo this will be different when moving directory
+require('dotenv').config({ path: '../../.env' }); // todo this will be different when moving directory
 
 describe('HandleNiftyBackend', () => {
     let event = require('./testData/testData.json');
