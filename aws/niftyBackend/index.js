@@ -63,7 +63,25 @@ exports.handler = async (event, context) => {
     await slackErrorLogger.logError('handler', `${AWS_LAMBDA_FUNCTION_NAME} failed.`, error);
   }
   console.log(`Completed ${AWS_LAMBDA_FUNCTION_NAME}`);
-  return { statusCode: 200, body: message };
+
+  // Access-Control-Allow-Credentials needs to be set also to 'true' on the cors enabled resource
+  return {
+    // headers: {
+    //   "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+    //   "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+    // },
+    headers: {
+      "Content-Type" : "application/json",
+      "Access-Control-Allow-Headers" : "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+      "Access-Control-Allow-Methods" : "OPTIONS,POST,GET,PUT,PATCH,DELETE", // HEAD?
+      "Access-Control-Allow-Credentials" : true,
+      "Access-Control-Allow-Origin" : "*",
+      "X-Requested-With" : "*"
+    },
+    statusCode: 200,
+    // body: JSON.stringify(response)
+    body: message
+  };
 };
 
 /**
