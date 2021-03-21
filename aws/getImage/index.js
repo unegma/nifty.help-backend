@@ -1,3 +1,4 @@
+
 const {
   AWS_LAMBDA_FUNCTION_NAME = 'Nifty_Help_getImage',
   // AWS_TIMEOUT_THRESHOLD
@@ -5,7 +6,7 @@ const {
   SLACK_MESSAGE_LOG,
 } = process.env;
 
-const IPFS = require('ipfs-core');
+const CID = require('cids');
 const { SlackErrorLogger, SlackLogger } = require('@unegma/logger');
 const slackErrorLogger = new SlackErrorLogger(SLACK_ERROR_LOG);
 const slackMessageLogger = new SlackLogger(SLACK_MESSAGE_LOG);
@@ -21,12 +22,17 @@ exports.handler = async (event, context) => {
   let message = "# Success";
   try {
 
-    const node = await IPFS.create();
-    let bufs = [];
-    for await (const buf of node.cat(event)) {
-      bufs.push(buf);
-    }
-    message = Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
+    let cid = new CID(value)
+    message = cid.toV1().toBaseEncodedString('base32')
+
+    // can't use ipfs-core with aws lamdba because:   (also it is SUCH A BIG LIBRARY that it pushes over upload limit)
+    // read-only file system, mkdir '/home/sbx_user1051' Error
+    // const node = await IPFS.create();
+    // let bufs = [];
+    // for await (const buf of node.cat(event)) {
+    //   bufs.push(buf);
+    // }
+    // message = Buffer.concat(bufs); // let blob = new Blob([data], {type:"image/jpg"});
 
   } catch(error) {
     message = error.message;
